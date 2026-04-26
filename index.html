@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>متجر الهواتف | هاتفك بضمان وجودة</title>
-  <!-- EmailJS CDN -->
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -39,8 +38,8 @@
     button[type="submit"]:hover{background:#047857}
     button[type="submit"]:disabled{opacity:0.6;cursor:not-allowed}
     footer{background:#1f2937;color:#fff;text-align:center;padding:20px;margin-top:40px;font-size:0.9rem}
-    .float-btn{position:fixed;bottom:20px;right:20px;background:#059669;color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:999;text-decoration:none}
     .success-msg{display:none;background:#ecfdf5;color:#065f46;padding:12px;border-radius:10px;text-align:center;margin-top:10px}
+    .error-msg{display:none;background:#fef2f2;color:#991b1b;padding:12px;border-radius:10px;text-align:center;margin-top:10px}
     @media(max-width:600px){.hero h1{font-size:2rem}}
   </style>
 </head>
@@ -93,6 +92,7 @@
       <textarea name="details" rows="3" placeholder="تفاصيل إضافية (اللون، السعة، إلخ)"></textarea>
       <button type="submit" id="submitBtn">🚀 أرسل الطلب</button>
       <div class="success-msg" id="successMsg">✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.</div>
+      <div class="error-msg" id="errorMsg"></div>
     </form>
   </section>
 
@@ -101,15 +101,12 @@
   </footer>
 
   <script>
-    // ✅ مفاتيح EmailJS الخاصة بك
-    const EMAILJS_USER_ID = "QG2JDfRIX54h-3dNx";        // Public Key
-    const EMAILJS_SERVICE_ID = "service_cw2fxm9";       // Service ID
-    const EMAILJS_TEMPLATE_ID = "template_bfhweb8";     // Template ID
+    // ✅ مفاتيح EmailJS (ثابتة وصحيحة)
+    const EMAILJS_USER_ID = "QG2JDfRIX54h-3dNx";
+    const EMAILJS_SERVICE_ID = "service_cw2fxm9";
+    const EMAILJS_TEMPLATE_ID = "template_bfhweb8"; // إذا أنشأت قالباً جديداً، استبدل هذا السطر بالـ ID الجديد
 
-    // تهيئة EmailJS
-    (function(){
-      emailjs.init(EMAILJS_USER_ID);
-    })();
+    emailjs.init(EMAILJS_USER_ID);
 
     // عرض المنتجات
     const products = [
@@ -133,20 +130,20 @@
       `;
     });
 
-    // إرسال النموذج عبر EmailJS
+    // إرسال النموذج
     const form = document.getElementById('orderForm');
     const submitBtn = document.getElementById('submitBtn');
     const successMsg = document.getElementById('successMsg');
+    const errorMsg = document.getElementById('errorMsg');
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
-      // تعطيل الزر مؤقتاً
       submitBtn.disabled = true;
       submitBtn.textContent = '⏳ جاري الإرسال...';
       successMsg.style.display = 'none';
+      errorMsg.style.display = 'none';
 
-      // تجهيز البيانات للإيميل
       const templateParams = {
         customer_name: form.customer_name.value,
         customer_phone: form.customer_phone.value,
@@ -159,14 +156,19 @@
 
       emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
         .then(function(response) {
-          console.log('نجاح', response.status);
           successMsg.style.display = 'block';
           form.reset();
-          submitBtn.disabled = false;
-          submitBtn.textContent = '🚀 أرسل الطلب';
-        }, function(error) {
-          console.log('فشل', error);
-          alert('❌ حدث خطأ أثناء الإرسال. الرجاء المحاولة مرة أخرى.');
+        })
+        .catch(function(error) {
+          console.error('EmailJS Error:', error);
+          let errorText = 'فشل الإرسال. ';
+          if (error.text) errorText += 'تفاصيل: ' + error.text;
+          else if (error.message) errorText += error.message;
+          else errorText += 'الرجاء التأكد من اتصالك بالإنترنت وإعدادات EmailJS.';
+          errorMsg.textContent = '❌ ' + errorText;
+          errorMsg.style.display = 'block';
+        })
+        .finally(function() {
           submitBtn.disabled = false;
           submitBtn.textContent = '🚀 أرسل الطلب';
         });
