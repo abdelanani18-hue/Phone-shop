@@ -4,20 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>متجر الهواتف • المنصة الشاملة</title>
+  <!-- خطوط وأيقونات -->
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- EmailJS SDK v3 -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
+    /* ================= المتغيرات الأساسية ================= */
     :root {
-      --primary: #0f766e; --primary-dark: #115e59; --primary-light: #14b8a6;
-      --bg: #f9fafb; --surface: #ffffff; --text: #111827; --text-secondary: #4b5563;
-      --border: #e5e7eb; --danger: #dc2626; --warning: #f59e0b; --success: #10b981;
-      --shadow: 0 4px 16px rgba(0,0,0,0.06); --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
-      --radius: 18px; --radius-sm: 12px; --transition: all 0.2s ease;
+      --primary: #0f766e;
+      --primary-dark: #115e59;
+      --primary-light: #14b8a6;
+      --bg: #f9fafb;
+      --surface: #ffffff;
+      --text: #111827;
+      --text-secondary: #4b5563;
+      --border: #e5e7eb;
+      --danger: #dc2626;
+      --warning: #f59e0b;
+      --success: #10b981;
+      --shadow: 0 4px 16px rgba(0,0,0,0.06);
+      --shadow-lg: 0 10px 30px rgba(0,0,0,0.1);
+      --radius: 18px;
+      --radius-sm: 12px;
+      --transition: all 0.2s ease;
     }
     .dark {
-      --bg: #0f172a; --surface: #1e293b; --text: #f1f5f9; --text-secondary: #94a3b8;
-      --border: #334155; --shadow: 0 4px 16px rgba(0,0,0,0.4);
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --border: #334155;
+      --shadow: 0 4px 16px rgba(0,0,0,0.4);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -28,7 +46,7 @@
     }
     .container { max-width: 1250px; margin: auto; padding: 0 25px; }
 
-    /* TOPNAV */
+    /* ================= شريط التنقل العلوي ================= */
     .topnav {
       background: var(--surface); border-bottom: 1px solid var(--border);
       padding: 10px 0; position: sticky; top: 0; z-index: 100;
@@ -50,7 +68,15 @@
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* HERO */
+    /* ================= شريط الإعلانات المتحرك ================= */
+    .marquee {
+      background: var(--primary-dark); color: #fff; padding: 8px 0;
+      overflow: hidden; white-space: nowrap; font-weight: 600;
+    }
+    .marquee span { display: inline-block; padding-left: 100%; animation: marquee 20s linear infinite; }
+    @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+
+    /* ================= قسم البطل ================= */
     .hero {
       background: linear-gradient(135deg, #0f766e 0%, #14b8a6 100%);
       color: #fff; text-align: center; padding: 80px 20px; border-radius: 0 0 50px 50px;
@@ -71,7 +97,7 @@
     .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
     .btn-outline:hover { background: var(--primary); color: #fff; }
 
-    /* FILTER BAR */
+    /* ================= شريط البحث والفلاتر ================= */
     .filter-bar {
       display: flex; gap: 12px; margin: 30px 0; flex-wrap: wrap; align-items: center;
     }
@@ -88,7 +114,7 @@
     }
     .chip.active { background: var(--primary); color: #fff; border-color: var(--primary); }
 
-    /* PRODUCTS GRID */
+    /* ================= شبكة المنتجات ================= */
     .products-grid {
       display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
       gap: 25px; margin: 30px 0 50px;
@@ -111,7 +137,7 @@
     .actions { display: flex; gap: 10px; margin-top: auto; }
     .actions button { flex: 1; }
 
-    /* MODAL */
+    /* ================= Modal تفاصيل المنتج ================= */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center;
@@ -123,7 +149,7 @@
     }
     .close-btn { position: absolute; top: 15px; right: 15px; font-size: 1.8rem; cursor: pointer; }
 
-    /* CART SIDEBAR */
+    /* ================= سلة المشتريات الجانبية ================= */
     .cart-sidebar {
       position: fixed; top: 0; right: -400px; width: 380px; height: 100%;
       background: var(--surface); box-shadow: var(--shadow-lg); z-index: 300;
@@ -135,16 +161,17 @@
     }
     .overlay.active { display: block; }
 
-    /* STARS */
+    /* ================= نجوم التقييم ================= */
     .stars { color: #fbbf24; }
 
-    /* WHATSAPP FLOAT */
+    /* ================= زر واتساب العائم ================= */
     .float-whatsapp {
       position: fixed; bottom: 30px; left: 30px; background: #25d366; color: #fff;
       width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center;
       justify-content: center; font-size: 1.8rem; box-shadow: var(--shadow-lg); z-index: 90;
     }
 
+    /* ================= تجاوب مع الجوال ================= */
     @media (max-width: 768px) {
       .hero h1 { font-size: 2.5rem; }
       .nav-links { display: none; }
@@ -153,7 +180,10 @@
 </head>
 <body>
 
-  <!-- TOPNAV -->
+  <!-- ================= شريط الإعلانات ================= -->
+  <div class="marquee"><span>🔥 عروض رمضان: خصم يصل إلى 15% على جميع هواتف سامسونج و آيفون • توصيل مجاني للطلبات فوق 50,000 د.ج •</span></div>
+
+  <!-- ================= TOPNAV ================= -->
   <header class="topnav container">
     <div class="logo"><i class="fas fa-mobile-alt"></i> PhoneStore</div>
     <nav class="nav-links">
@@ -168,14 +198,14 @@
     </nav>
   </header>
 
-  <!-- HERO -->
+  <!-- ================= HERO ================= -->
   <section class="hero">
     <h1>وجهتك الأولى لشراء الهواتف الذكية</h1>
-    <p>أكثر من 35 هاتفاً من أشهر الماركات العالمية • ضمان حقيقي • توصيل سريع لجميع الولايات</p>
+    <p>أكثر من 60 هاتفاً من أشهر الماركات العالمية • ضمان حقيقي • توصيل سريع لجميع الولايات</p>
     <a href="#products" class="btn"><i class="fas fa-shopping-bag"></i> تصفح الهواتف</a>
   </section>
 
-  <!-- PRODUCTS SECTION -->
+  <!-- ================= PRODUCTS SECTION ================= -->
   <div class="container" id="products">
     <div class="filter-bar">
       <div class="search-box"><input type="text" id="searchInput" placeholder="ابحث عن هاتف... (مثال: iPhone 15)"></div>
@@ -184,12 +214,12 @@
     <div class="products-grid" id="productGrid"></div>
   </div>
 
-  <!-- MODAL -->
+  <!-- ================= MODAL ================= -->
   <div class="modal" id="productModal">
     <div class="modal-content" id="modalBody"></div>
   </div>
 
-  <!-- CART SIDEBAR -->
+  <!-- ================= CART SIDEBAR ================= -->
   <div class="overlay" id="overlay"></div>
   <div class="cart-sidebar" id="cartSidebar">
     <h2 style="margin-bottom:20px">🛒 سلة المشتريات</h2>
@@ -197,13 +227,14 @@
     <button class="btn btn-primary" onclick="checkout()" style="margin-top:20px">الدفع</button>
   </div>
 
-  <!-- WHATSAPP FLOAT -->
+  <!-- ================= WHATSAPP FLOAT ================= -->
   <a href="https://wa.me/213000000000" target="_blank" class="float-whatsapp"><i class="fab fa-whatsapp"></i></a>
 
+  <!-- ================= SCRIPT الرئيسي ================= -->
   <script>
-    // ================= 35 هاتفاً حقيقياً =================
+    // ================= بيانات الهواتف الضخمة (60+ هاتف) =================
     const phones = [
-      // Apple (7 أجهزة)
+      // Apple (10 أجهزة)
       { id:1, brand:"apple", name:"iPhone 15 Pro Max", price:249000, condition:"جديد", specs:["6.7″ OLED","A17 Pro","256GB","5G"], rating:4.9, img:"https://images.unsplash.com/photo-1695048133142-1a20484d2569?w=400&h=300&fit=crop" },
       { id:2, brand:"apple", name:"iPhone 15 Pro", price:210000, condition:"جديد", specs:["6.1″ OLED","A17 Pro","128GB","5G"], rating:4.8, img:"https://images.unsplash.com/photo-1695048223149-85435b4d1b5e?w=400&h=300&fit=crop" },
       { id:3, brand:"apple", name:"iPhone 15", price:180000, condition:"جديد", specs:["6.1″ OLED","A16 Bionic","128GB","5G"], rating:4.7, img:"https://images.unsplash.com/photo-1695036005278-15a7e2e33c63?w=400&h=300&fit=crop" },
@@ -211,43 +242,75 @@
       { id:5, brand:"apple", name:"iPhone 14", price:85000, condition:"مستعمل", specs:["6.1″","A15","128GB","5G"], rating:4.4, img:"https://images.unsplash.com/photo-1678652197831-2d180705cd2c?w=400&h=300&fit=crop" },
       { id:6, brand:"apple", name:"iPhone 13", price:65000, condition:"مستعمل", specs:["6.1″","A15","128GB","4G/5G"], rating:4.3, img:"https://images.unsplash.com/photo-1632661674596-618d8b0d4410?w=400&h=300&fit=crop" },
       { id:7, brand:"apple", name:"iPhone SE (2022)", price:52000, condition:"جديد", specs:["4.7″","A15","64GB","5G"], rating:4.1, img:"https://images.unsplash.com/photo-1650911467290-ec2c92aef3a6?w=400&h=300&fit=crop" },
-
-      // Samsung (8 أجهزة)
-      { id:8, brand:"samsung", name:"Galaxy S24 Ultra", price:235000, condition:"جديد", specs:["6.8″ AMOLED","S-Pen","256GB","5G"], rating:4.9, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
-      { id:9, brand:"samsung", name:"Galaxy S24+", price:190000, condition:"جديد", specs:["6.7″ AMOLED","256GB","5G"], rating:4.8, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
-      { id:10, brand:"samsung", name:"Galaxy S23 FE", price:89000, condition:"جديد", specs:["6.4″ AMOLED","128GB","5G"], rating:4.5, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:11, brand:"samsung", name:"Galaxy A55", price:55000, condition:"جديد", specs:["6.6″ AMOLED","128GB","IP67"], rating:4.4, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
-      { id:12, brand:"samsung", name:"Galaxy A35", price:42000, condition:"جديد", specs:["6.6″ AMOLED","128GB","5G"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:13, brand:"samsung", name:"Galaxy Z Flip5", price:260000, condition:"جديد", specs:["6.7″ Foldable","256GB","5G"], rating:4.7, img:"https://images.unsplash.com/photo-1662947995689-ec5165848f8e?w=400&h=300&fit=crop" },
-      { id:14, brand:"samsung", name:"Galaxy S22 Ultra (مستعمل)", price:145000, condition:"مستعمل", specs:["6.8″ AMOLED","S-Pen","256GB","5G"], rating:4.5, img:"https://images.unsplash.com/photo-1653058998573-26c7f69d7e4e?w=400&h=300&fit=crop" },
-      { id:15, brand:"samsung", name:"Galaxy S21 FE (مستعمل)", price:63000, condition:"مستعمل", specs:["6.4″ AMOLED","128GB","5G"], rating:4.2, img:"https://images.unsplash.com/photo-1642137687520-950c3736db8e?w=400&h=300&fit=crop" },
-
-      // Xiaomi (7 أجهزة)
-      { id:16, brand:"xiaomi", name:"Xiaomi 14 Ultra", price:220000, condition:"جديد", specs:["6.73″ AMOLED","Leica","512GB","5G"], rating:4.8, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:17, brand:"xiaomi", name:"Xiaomi 13T Pro", price:115000, condition:"جديد", specs:["6.67″ AMOLED","MediaTek 9200+","512GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:18, brand:"xiaomi", name:"Redmi Note 13 Pro+", price:48000, condition:"جديد", specs:["6.67″ AMOLED","200MP","120W"], rating:4.5, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-      { id:19, brand:"xiaomi", name:"Redmi Note 13", price:36000, condition:"جديد", specs:["6.67″ AMOLED","108MP","5000mAh"], rating:4.4, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-      { id:20, brand:"xiaomi", name:"Poco X6 Pro", price:41000, condition:"جديد", specs:["6.67″ AMOLED","Dimensity 8300","5G"], rating:4.3, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-      { id:21, brand:"xiaomi", name:"Xiaomi 12 (مستعمل)", price:68000, condition:"مستعمل", specs:["6.28″ AMOLED","Snapdragon 8 Gen1","256GB"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:22, brand:"xiaomi", name:"Redmi 12C", price:18000, condition:"جديد", specs:["6.71″","MediaTek G85","64GB"], rating:4.0, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-
-      // Huawei (5 أجهزة)
-      { id:23, brand:"huawei", name:"Huawei P60 Pro", price:160000, condition:"جديد", specs:["6.67″ OLED","XMAGE","256GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:24, brand:"huawei", name:"Huawei Mate 60 Pro", price:210000, condition:"جديد", specs:["6.82″ OLED","HarmonyOS","256GB"], rating:4.7, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:25, brand:"huawei", name:"Huawei Nova 11i", price:38000, condition:"جديد", specs:["6.8″","5000mAh","128GB"], rating:4.3, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-      { id:26, brand:"huawei", name:"Huawei P40 Pro (مستعمل)", price:89000, condition:"مستعمل", specs:["6.58″ OLED","Leica","256GB","5G"], rating:4.4, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:27, brand:"huawei", name:"Huawei Y9a", price:28000, condition:"جديد", specs:["6.63″","MediaTek G80","128GB"], rating:4.1, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
-
-      // أخرى (8 أجهزة: Google, OnePlus, Nothing, Honor, Sony, Asus, Oppo, Realme)
-      { id:28, brand:"google", name:"Google Pixel 8 Pro", price:185000, condition:"جديد", specs:["6.7″ OLED","Tensor G3","128GB"], rating:4.7, img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=300&fit=crop" },
-      { id:29, brand:"google", name:"Google Pixel 7a", price:62000, condition:"جديد", specs:["6.1″ OLED","Tensor G2","128GB"], rating:4.4, img:"https://images.unsplash.com/photo-1677081131950-e0df1e551e11?w=400&h=300&fit=crop" },
-      { id:30, brand:"oneplus", name:"OnePlus 12", price:170000, condition:"جديد", specs:["6.82″ AMOLED","Snapdragon 8 Gen3","256GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:31, brand:"nothing", name:"Nothing Phone (2)", price:105000, condition:"جديد", specs:["6.7″ OLED","Snapdragon 8+","256GB"], rating:4.5, img:"https://images.unsplash.com/photo-1678483718122-1c3b7b63c194?w=400&h=300&fit=crop" },
-      { id:32, brand:"honor", name:"Honor Magic6 Pro", price:200000, condition:"جديد", specs:["6.8″ OLED","Snapdragon 8 Gen3","512GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
-      { id:33, brand:"sony", name:"Sony Xperia 1 V", price:195000, condition:"جديد", specs:["6.5″ 4K OLED","Snapdragon 8 Gen2","256GB"], rating:4.5, img:"https://images.unsplash.com/photo-1601465528050-1357a2c37ac8?w=400&h=300&fit=crop" },
-      { id:34, brand:"asus", name:"Asus Zenfone 10", price:135000, condition:"جديد", specs:["5.9″ AMOLED","Snapdragon 8 Gen2","128GB"], rating:4.5, img:"https://images.unsplash.com/photo-1598961942613-5b0f8e5b3e8e?w=400&h=300&fit=crop" },
-      { id:35, brand:"oppo", name:"Oppo Find X6 Pro", price:155000, condition:"جديد", specs:["6.82″ AMOLED","Snapdragon 8 Gen2","256GB"], rating:4.4, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" }
+      { id:8, brand:"apple", name:"iPhone 12 Pro", price:78000, condition:"مستعمل", specs:["6.1″ OLED","A14","128GB","5G"], rating:4.5, img:"https://images.unsplash.com/photo-1604054923518-e4918e34e7c4?w=400&h=300&fit=crop" },
+      { id:9, brand:"apple", name:"iPhone 11", price:45000, condition:"مستعمل", specs:["6.1″ LCD","A13","64GB","4G"], rating:4.2, img:"https://images.unsplash.com/photo-1580910051074-3eb694886505?w=400&h=300&fit=crop" },
+      { id:10, brand:"apple", name:"iPhone XR", price:32000, condition:"مستعمل", specs:["6.1″ LCD","A12","64GB","4G"], rating:4.0, img:"https://images.unsplash.com/photo-1559766548-e3b3c2c1c8b4?w=400&h=300&fit=crop" },
+      // Samsung (13 جهاز)
+      { id:11, brand:"samsung", name:"Galaxy S24 Ultra", price:235000, condition:"جديد", specs:["6.8″ AMOLED","S-Pen","256GB","5G"], rating:4.9, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
+      { id:12, brand:"samsung", name:"Galaxy S24+", price:190000, condition:"جديد", specs:["6.7″ AMOLED","256GB","5G"], rating:4.8, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
+      { id:13, brand:"samsung", name:"Galaxy S23 FE", price:89000, condition:"جديد", specs:["6.4″ AMOLED","128GB","5G"], rating:4.5, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:14, brand:"samsung", name:"Galaxy A55", price:55000, condition:"جديد", specs:["6.6″ AMOLED","128GB","IP67"], rating:4.4, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
+      { id:15, brand:"samsung", name:"Galaxy A35", price:42000, condition:"جديد", specs:["6.6″ AMOLED","128GB","5G"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:16, brand:"samsung", name:"Galaxy Z Flip5", price:260000, condition:"جديد", specs:["6.7″ Foldable","256GB","5G"], rating:4.7, img:"https://images.unsplash.com/photo-1662947995689-ec5165848f8e?w=400&h=300&fit=crop" },
+      { id:17, brand:"samsung", name:"Galaxy S22 Ultra (مستعمل)", price:145000, condition:"مستعمل", specs:["6.8″ AMOLED","S-Pen","256GB","5G"], rating:4.5, img:"https://images.unsplash.com/photo-1653058998573-26c7f69d7e4e?w=400&h=300&fit=crop" },
+      { id:18, brand:"samsung", name:"Galaxy S21 FE (مستعمل)", price:63000, condition:"مستعمل", specs:["6.4″ AMOLED","128GB","5G"], rating:4.2, img:"https://images.unsplash.com/photo-1642137687520-950c3736db8e?w=400&h=300&fit=crop" },
+      { id:19, brand:"samsung", name:"Galaxy M14", price:23000, condition:"جديد", specs:["6.6″ PLS LCD","6000mAh","64GB"], rating:4.0, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
+      { id:20, brand:"samsung", name:"Galaxy A14", price:20000, condition:"جديد", specs:["6.6″ LCD","50MP","5000mAh"], rating:3.9, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:21, brand:"samsung", name:"Galaxy S10e (مستعمل)", price:28000, condition:"مستعمل", specs:["5.8″ AMOLED","Snapdragon 855","128GB"], rating:4.1, img:"https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop" },
+      { id:22, brand:"samsung", name:"Galaxy Note 20 Ultra (مستعمل)", price:110000, condition:"مستعمل", specs:["6.9″ AMOLED","S-Pen","256GB"], rating:4.4, img:"https://images.unsplash.com/photo-1598961942613-5b0f8e5b3e8e?w=400&h=300&fit=crop" },
+      { id:23, brand:"samsung", name:"Galaxy Z Fold4 (مستعمل)", price:200000, condition:"مستعمل", specs:["7.6″ Foldable","256GB","5G"], rating:4.6, img:"https://images.unsplash.com/photo-1661347990750-cc7c9bce6c56?w=400&h=300&fit=crop" },
+      // Xiaomi (10 أجهزة)
+      { id:24, brand:"xiaomi", name:"Xiaomi 14 Ultra", price:220000, condition:"جديد", specs:["6.73″ AMOLED","Leica","512GB","5G"], rating:4.8, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:25, brand:"xiaomi", name:"Xiaomi 13T Pro", price:115000, condition:"جديد", specs:["6.67″ AMOLED","MediaTek 9200+","512GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:26, brand:"xiaomi", name:"Redmi Note 13 Pro+", price:48000, condition:"جديد", specs:["6.67″ AMOLED","200MP","120W"], rating:4.5, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:27, brand:"xiaomi", name:"Redmi Note 13", price:36000, condition:"جديد", specs:["6.67″ AMOLED","108MP","5000mAh"], rating:4.4, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:28, brand:"xiaomi", name:"Poco X6 Pro", price:41000, condition:"جديد", specs:["6.67″ AMOLED","Dimensity 8300","5G"], rating:4.3, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:29, brand:"xiaomi", name:"Xiaomi 12 (مستعمل)", price:68000, condition:"مستعمل", specs:["6.28″ AMOLED","Snapdragon 8 Gen1","256GB"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:30, brand:"xiaomi", name:"Redmi 12C", price:18000, condition:"جديد", specs:["6.71″","MediaTek G85","64GB"], rating:4.0, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:31, brand:"xiaomi", name:"Poco M5s", price:24000, condition:"جديد", specs:["6.43″ AMOLED","Helio G95","128GB"], rating:4.1, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:32, brand:"xiaomi", name:"Redmi A2+", price:14000, condition:"جديد", specs:["6.52″","MediaTek G36","32GB"], rating:3.8, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:33, brand:"xiaomi", name:"Xiaomi 11T", price:55000, condition:"مستعمل", specs:["6.67″ AMOLED","MediaTek 1200","256GB"], rating:4.3, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Huawei (6 أجهزة)
+      { id:34, brand:"huawei", name:"Huawei P60 Pro", price:160000, condition:"جديد", specs:["6.67″ OLED","XMAGE","256GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:35, brand:"huawei", name:"Huawei Mate 60 Pro", price:210000, condition:"جديد", specs:["6.82″ OLED","HarmonyOS","256GB"], rating:4.7, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:36, brand:"huawei", name:"Huawei Nova 11i", price:38000, condition:"جديد", specs:["6.8″","5000mAh","128GB"], rating:4.3, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:37, brand:"huawei", name:"Huawei P40 Pro (مستعمل)", price:89000, condition:"مستعمل", specs:["6.58″ OLED","Leica","256GB","5G"], rating:4.4, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:38, brand:"huawei", name:"Huawei Y9a", price:28000, condition:"جديد", specs:["6.63″","MediaTek G80","128GB"], rating:4.1, img:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=300&fit=crop" },
+      { id:39, brand:"huawei", name:"Huawei Mate 40 Pro (مستعمل)", price:120000, condition:"مستعمل", specs:["6.76″ OLED","Kirin 9000","256GB"], rating:4.5, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Google (4 أجهزة)
+      { id:40, brand:"google", name:"Google Pixel 8 Pro", price:185000, condition:"جديد", specs:["6.7″ OLED","Tensor G3","128GB"], rating:4.7, img:"https://images.unsplash.com/photo-1598327105666-5b89351aff97?w=400&h=300&fit=crop" },
+      { id:41, brand:"google", name:"Google Pixel 7a", price:62000, condition:"جديد", specs:["6.1″ OLED","Tensor G2","128GB"], rating:4.4, img:"https://images.unsplash.com/photo-1677081131950-e0df1e551e11?w=400&h=300&fit=crop" },
+      { id:42, brand:"google", name:"Google Pixel 6 Pro (مستعمل)", price:95000, condition:"مستعمل", specs:["6.7″ OLED","Tensor","128GB"], rating:4.4, img:"https://images.unsplash.com/photo-1635878458444-3c8a3d496c6b?w=400&h=300&fit=crop" },
+      { id:43, brand:"google", name:"Google Pixel 5a", price:48000, condition:"مستعمل", specs:["6.34″ OLED","Snapdragon 765G","128GB"], rating:4.2, img:"https://images.unsplash.com/photo-1628051560225-4f2e6e5c0e8e?w=400&h=300&fit=crop" },
+      // OnePlus (3 أجهزة)
+      { id:44, brand:"oneplus", name:"OnePlus 12", price:170000, condition:"جديد", specs:["6.82″ AMOLED","Snapdragon 8 Gen3","256GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:45, brand:"oneplus", name:"OnePlus Nord 3", price:73000, condition:"جديد", specs:["6.74″ AMOLED","Dimensity 9000","128GB"], rating:4.4, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:46, brand:"oneplus", name:"OnePlus 10T (مستعمل)", price:82000, condition:"مستعمل", specs:["6.7″ AMOLED","Snapdragon 8+ Gen1","256GB"], rating:4.3, img:"https://images.unsplash.com/photo-1662947995689-ec5165848f8e?w=400&h=300&fit=crop" },
+      // Nothing (2)
+      { id:47, brand:"nothing", name:"Nothing Phone (2)", price:105000, condition:"جديد", specs:["6.7″ OLED","Snapdragon 8+","256GB"], rating:4.5, img:"https://images.unsplash.com/photo-1678483718122-1c3b7b63c194?w=400&h=300&fit=crop" },
+      { id:48, brand:"nothing", name:"Nothing Phone (1)", price:68000, condition:"مستعمل", specs:["6.55″ OLED","Snapdragon 778G+","128GB"], rating:4.3, img:"https://images.unsplash.com/photo-1655472245456-8f8e7a2c1b1f?w=400&h=300&fit=crop" },
+      // Honor (2)
+      { id:49, brand:"honor", name:"Honor Magic6 Pro", price:200000, condition:"جديد", specs:["6.8″ OLED","Snapdragon 8 Gen3","512GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:50, brand:"honor", name:"Honor 90", price:62000, condition:"جديد", specs:["6.7″ AMOLED","Snapdragon 7 Gen1","256GB"], rating:4.3, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Sony (2)
+      { id:51, brand:"sony", name:"Sony Xperia 1 V", price:195000, condition:"جديد", specs:["6.5″ 4K OLED","Snapdragon 8 Gen2","256GB"], rating:4.5, img:"https://images.unsplash.com/photo-1601465528050-1357a2c37ac8?w=400&h=300&fit=crop" },
+      { id:52, brand:"sony", name:"Sony Xperia 5 IV (مستعمل)", price:105000, condition:"مستعمل", specs:["6.1″ OLED","Snapdragon 8 Gen1","128GB"], rating:4.3, img:"https://images.unsplash.com/photo-1598961942613-5b0f8e5b3e8e?w=400&h=300&fit=crop" },
+      // Asus (2)
+      { id:53, brand:"asus", name:"Asus Zenfone 10", price:135000, condition:"جديد", specs:["5.9″ AMOLED","Snapdragon 8 Gen2","128GB"], rating:4.5, img:"https://images.unsplash.com/photo-1598961942613-5b0f8e5b3e8e?w=400&h=300&fit=crop" },
+      { id:54, brand:"asus", name:"Asus ROG Phone 7", price:210000, condition:"جديد", specs:["6.78″ AMOLED","Snapdragon 8 Gen2","512GB"], rating:4.6, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Oppo (3)
+      { id:55, brand:"oppo", name:"Oppo Find X6 Pro", price:155000, condition:"جديد", specs:["6.82″ AMOLED","Snapdragon 8 Gen2","256GB"], rating:4.4, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:56, brand:"oppo", name:"Oppo Reno 10 Pro+", price:98000, condition:"جديد", specs:["6.74″ OLED","Snapdragon 8+ Gen1","256GB"], rating:4.3, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:57, brand:"oppo", name:"Oppo A78", price:32000, condition:"جديد", specs:["6.43″ AMOLED","Snapdragon 680","128GB"], rating:4.0, img:"https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400&h=300&fit=crop" },
+      // Realme (2)
+      { id:58, brand:"realme", name:"Realme GT 5", price:120000, condition:"جديد", specs:["6.74″ AMOLED","Snapdragon 8 Gen2","512GB"], rating:4.5, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      { id:59, brand:"realme", name:"Realme 11 Pro+", price:43000, condition:"جديد", specs:["6.7″ AMOLED","Dimensity 7050","256GB"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Infinix (1)
+      { id:60, brand:"infinix", name:"Infinix Note 30 VIP", price:47000, condition:"جديد", specs:["6.67″ AMOLED","Dimensity 8050","256GB"], rating:4.2, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" },
+      // Tecno (1)
+      { id:61, brand:"tecno", name:"Tecno Camon 20 Premier", price:39000, condition:"جديد", specs:["6.67″ AMOLED","Dimensity 8050","512GB"], rating:4.1, img:"https://images.unsplash.com/photo-1672754861043-774e8e8d8cf0?w=400&h=300&fit=crop" }
     ];
+    // نهاية بيانات الهواتف
 
     // ================= المتغيرات العامة =================
     let cart = JSON.parse(localStorage.getItem('cart')) || [];
@@ -395,7 +458,7 @@
     // ================= البحث =================
     document.getElementById('searchInput').addEventListener('input', () => renderProducts());
 
-    // ================= الثيم =================
+    // ================= الثيم (داكن / فاتح) =================
     const themeToggle = document.getElementById('themeToggle');
     themeToggle.addEventListener('click', () => {
       document.body.classList.toggle('dark');
@@ -433,7 +496,8 @@
     updateCounters();
     renderProducts();
   </script>
-  <!-- ================= المميزات ================= -->
+
+  <!-- ================= أقسام إضافية (مميزات، آراء، نموذج، فوتر) ================= -->
   <section id="features" class="container" style="padding: 60px 0;">
     <div style="text-align:center; margin-bottom:40px;">
       <h2 style="font-size:2.2rem; font-weight:900;">لماذا نحن الخيار الأفضل؟</h2>
@@ -463,7 +527,6 @@
     </div>
   </section>
 
-  <!-- ================= آراء العملاء ================= -->
   <section id="testimonials" class="container" style="padding: 50px 0;">
     <div style="text-align:center; margin-bottom:30px;">
       <h2 style="font-size:2.2rem; font-weight:900;">ماذا يقول عملاؤنا؟</h2>
@@ -487,7 +550,6 @@
     </div>
   </section>
 
-  <!-- ================= نموذج الطلب (مع EmailJS) ================= -->
   <section id="order" class="container" style="background: linear-gradient(145deg, var(--surface), var(--bg)); border-radius: 30px; padding: 50px 25px; margin: 50px auto;">
     <div style="text-align:center; margin-bottom:30px;">
       <h2 style="font-size:2.2rem; font-weight:900;">📩 اطلب هاتفك الآن</h2>
@@ -501,8 +563,6 @@
         <option value="">اختر الهاتف المطلوب</option>
       </select>
       <textarea name="details" rows="3" placeholder="ملاحظات إضافية (اللون، السعة...)" style="padding:14px; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--text); font-family: inherit;"></textarea>
-
-      <!-- طرق الدفع -->
       <div style="margin:10px 0;">
         <p style="font-weight:700; margin-bottom:8px;">طريقة الدفع المفضلة:</p>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
@@ -517,7 +577,6 @@
           </label>
         </div>
       </div>
-
       <button type="submit" id="submitBtn" class="btn btn-primary" style="width:100%; justify-content:center; padding:14px; font-size:1.1rem;">
         <i class="fas fa-paper-plane"></i> أرسل الطلب
       </button>
@@ -526,7 +585,6 @@
     </form>
   </section>
 
-  <!-- ================= الفوتر ================= -->
   <footer style="background: #111827; color: #d1d5db; padding: 50px 20px 25px; margin-top: 60px;">
     <div class="container">
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 35px;">
@@ -560,9 +618,9 @@
     </div>
   </footer>
 
-  <!-- ================= تهيئة نموذج الطلب و EmailJS ================= -->
+  <!-- ================= إعداد نموذج الطلب وEmailJS ================= -->
   <script>
-    // ملء قائمة اختيار الهاتف في النموذج
+    // ملء قائمة اختيار الهاتف
     const orderSelect = document.getElementById('phoneModelSelect');
     phones.forEach(p => {
       const opt = document.createElement('option');
@@ -571,9 +629,8 @@
       orderSelect.appendChild(opt);
     });
 
-    // إعداد EmailJS (باستخدام مفاتيحك)
+    // EmailJS
     emailjs.init("QG2JDfRIX54h-3dNx");
-
     const orderForm = document.getElementById('orderForm');
     const submitBtn = document.getElementById('submitBtn');
     const successMsg = document.getElementById('successMsg');
@@ -613,19 +670,6 @@
           submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> أرسل الطلب';
         });
     });
-  </script>
-
-  <!-- ================= تحديث السلة من المفضلة عند النقر ================= -->
-  <script>
-    // إعادة تحديث الوظائف المرتبطة بالسلة لتعمل مع الأزرار الجديدة
-    window.addToCart = addToCart;
-    window.toggleWish = toggleWish;
-    window.openModal = openModal;
-    window.closeModal = closeModal;
-    window.removeFromCart = removeFromCart;
-    window.checkout = checkout;
-    window.filterBrand = filterBrand;
-    window.showToast = showToast;
   </script>
 
 </body>
