@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>متجر الهواتف | هاتفك بضمان وجودة</title>
+  <!-- EmailJS CDN -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:#f9fafb;color:#1f2937;line-height:1.6}
@@ -31,12 +33,14 @@
     .product-info .price{color:#059669;font-weight:700;font-size:1.2rem}
     .about{background:#fff;border-radius:20px;padding:30px;text-align:center;max-width:700px;margin:0 auto;box-shadow:0 2px 10px rgba(0,0,0,0.02)}
     .contact{text-align:center}
-    form{max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:15px}
-    input,textarea{padding:12px 15px;border:1px solid #d1d5db;border-radius:10px;font-family:inherit;font-size:0.95rem}
+    form{max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:15px}
+    input,textarea,select{padding:12px 15px;border:1px solid #d1d5db;border-radius:10px;font-family:inherit;font-size:0.95rem}
     button[type="submit"]{background:#059669;color:#fff;border:none;padding:12px;border-radius:50px;font-weight:700;font-size:1rem;cursor:pointer;transition:0.2s}
     button[type="submit"]:hover{background:#047857}
+    button[type="submit"]:disabled{opacity:0.6;cursor:not-allowed}
     footer{background:#1f2937;color:#fff;text-align:center;padding:20px;margin-top:40px;font-size:0.9rem}
-    .whatsapp-float{position:fixed;bottom:20px;right:20px;background:#25d366;color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:999}
+    .float-btn{position:fixed;bottom:20px;right:20px;background:#059669;color:#fff;width:55px;height:55px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:999;text-decoration:none}
+    .success-msg{display:none;background:#ecfdf5;color:#065f46;padding:12px;border-radius:10px;text-align:center;margin-top:10px}
     @media(max-width:600px){.hero h1{font-size:2rem}}
   </style>
 </head>
@@ -47,15 +51,15 @@
       <nav>
         <a href="#products">المنتجات</a>
         <a href="#about">من نحن</a>
-        <a href="#contact">اتصل بنا</a>
+        <a href="#order">اطلب الآن</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
     <h1>هاتفك المثالي بضمان وجودة</h1>
-    <p>نوفر أحدث الهواتف الذكية الجديدة والمستعملة بأفضل الأسعار في السوق. اطلب الآن واستلم فوراً.</p>
-    <a href="https://wa.me/213XXXXXXXXX" class="btn" target="_blank">💬 تواصل عبر واتساب</a>
+    <p>نوفر أحدث الهواتف الذكية الجديدة والمستعملة بأفضل الأسعار. اطلب الآن وسنرد عليك فوراً.</p>
+    <a href="#order" class="btn">📱 اطلب هاتفك الآن</a>
   </section>
 
   <section id="products" class="container">
@@ -70,13 +74,25 @@
     </div>
   </section>
 
-  <section id="contact" class="container contact">
-    <h2>📩 تواصل معنا</h2>
-    <form id="contactForm">
-      <input type="text" id="name" placeholder="الاسم" required>
-      <input type="text" id="phone" placeholder="رقم الهاتف" required>
-      <textarea id="message" rows="4" placeholder="اكتب استفسارك..."></textarea>
-      <button type="submit">إرسال عبر واتساب</button>
+  <section id="order" class="container contact">
+    <h2>📩 اطلب هاتفك الآن</h2>
+    <p style="text-align:center;margin-bottom:20px;color:#6b7280">املأ النموذج وسنرسل لك تأكيداً فورياً</p>
+    <form id="orderForm">
+      <input type="text" name="customer_name" placeholder="الاسم الكامل" required>
+      <input type="tel" name="customer_phone" placeholder="رقم الهاتف" required>
+      <input type="email" name="customer_email" placeholder="بريدك الإلكتروني (اختياري)">
+      <select name="phone_model" required>
+        <option value="">اختر الهاتف المطلوب</option>
+        <option value="iPhone 15 Pro">iPhone 15 Pro</option>
+        <option value="Samsung Galaxy S24">Samsung Galaxy S24</option>
+        <option value="Xiaomi Redmi Note 13">Xiaomi Redmi Note 13</option>
+        <option value="iPhone 14 (مستعمل)">iPhone 14 (مستعمل)</option>
+        <option value="Huawei P60 Pro">Huawei P60 Pro</option>
+        <option value="غير ذلك">أكتب في التفاصيل</option>
+      </select>
+      <textarea name="details" rows="3" placeholder="تفاصيل إضافية (اللون، السعة، إلخ)"></textarea>
+      <button type="submit" id="submitBtn">🚀 أرسل الطلب</button>
+      <div class="success-msg" id="successMsg">✅ تم إرسال طلبك بنجاح! سنتواصل معك قريباً.</div>
     </form>
   </section>
 
@@ -84,10 +100,18 @@
     <p>© 2025 متجر الهواتف. جميع الحقوق محفوظة.</p>
   </footer>
 
-  <a href="https://wa.me/213XXXXXXXXX" class="whatsapp-float" target="_blank" title="تواصل معنا">💬</a>
-
   <script>
-    // بيانات المنتجات (يمكنك تعديلها أو جلبها من API لاحقاً)
+    // ✅ مفاتيح EmailJS الخاصة بك
+    const EMAILJS_USER_ID = "QG2JDfRIX54h-3dNx";        // Public Key
+    const EMAILJS_SERVICE_ID = "service_cw2fxm9";       // Service ID
+    const EMAILJS_TEMPLATE_ID = "template_bfhweb8";     // Template ID
+
+    // تهيئة EmailJS
+    (function(){
+      emailjs.init(EMAILJS_USER_ID);
+    })();
+
+    // عرض المنتجات
     const products = [
       { name: "iPhone 15 Pro", price: "210,000 د.ج", img: "https://placehold.co/300x200/e2e8f0/1e293b?text=iPhone+15" },
       { name: "Samsung Galaxy S24", price: "185,000 د.ج", img: "https://placehold.co/300x200/e2e8f0/1e293b?text=Galaxy+S24" },
@@ -109,15 +133,43 @@
       `;
     });
 
-    // نموذج الاتصال: يرسل إلى واتساب
-    document.getElementById('contactForm').addEventListener('submit', function(e){
+    // إرسال النموذج عبر EmailJS
+    const form = document.getElementById('orderForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const successMsg = document.getElementById('successMsg');
+
+    form.addEventListener('submit', function(e) {
       e.preventDefault();
-      const name = document.getElementById('name').value;
-      const phone = document.getElementById('phone').value;
-      const msg = document.getElementById('message').value;
-      const text = `مرحباً، أنا ${name} (${phone}). ${msg}`;
-      const url = `https://wa.me/213XXXXXXXXX?text=${encodeURIComponent(text)}`;
-      window.open(url, '_blank');
+
+      // تعطيل الزر مؤقتاً
+      submitBtn.disabled = true;
+      submitBtn.textContent = '⏳ جاري الإرسال...';
+      successMsg.style.display = 'none';
+
+      // تجهيز البيانات للإيميل
+      const templateParams = {
+        customer_name: form.customer_name.value,
+        customer_phone: form.customer_phone.value,
+        customer_email: form.customer_email.value || 'غير متوفر',
+        phone_model: form.phone_model.value,
+        details: form.details.value || 'لا يوجد',
+        order_number: 'SS-' + Math.random().toString(36).substr(2, 8).toUpperCase(),
+        date: new Date().toLocaleString('ar-DZ')
+      };
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          console.log('نجاح', response.status);
+          successMsg.style.display = 'block';
+          form.reset();
+          submitBtn.disabled = false;
+          submitBtn.textContent = '🚀 أرسل الطلب';
+        }, function(error) {
+          console.log('فشل', error);
+          alert('❌ حدث خطأ أثناء الإرسال. الرجاء المحاولة مرة أخرى.');
+          submitBtn.disabled = false;
+          submitBtn.textContent = '🚀 أرسل الطلب';
+        });
     });
   </script>
 </body>
